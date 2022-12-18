@@ -1,16 +1,12 @@
 package org.bedu.crp.Proyecto.config;
 
-import lombok.extern.slf4j.Slf4j;
 import org.bedu.crp.Proyecto.model.Spectrum;
 import org.bedu.crp.Proyecto.repository.ISpectrumRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
-
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 import java.util.Scanner;
-
-@Slf4j
 @Component
 public class Seeder implements CommandLineRunner {
     private ISpectrumRepository repository;
@@ -18,9 +14,9 @@ public class Seeder implements CommandLineRunner {
         this.repository=repository;
     }
     private static Logger logger= LoggerFactory.getLogger(Seeder.class);
-    int n, tam_T, year, mount, day;
+    int n, tam_T;
     float t_i, t_f, t_c,  aux, beta, gamma, at, epsilon;
-    String sta, contry, town, name_file;
+    String sta, contry, town, date, name_file;
     @Override
     public void run(String[] args){
         logger.info("Inicia la clase Seeder");
@@ -53,53 +49,36 @@ public class Seeder implements CommandLineRunner {
 
         //Matriz Resultados
         float [][] M= new float[tam_T][n*4];
-        System.out.println("Value delta t");
-        at = escanear.nextFloat();
-        System.out.println("damping rate");
-        epsilon = escanear.nextFloat();
-        epsilon=epsilon/100;
-        n=n+1;
         for (int i=0; i<n; i++){
-            if (i ==0) {
-                System.out.println("Data of sesimic:");
-            }
-            else {
-                System.out.println("");
-                System.out.println("Description ");
-                sta = escanear.nextLine();
-                System.out.println("Contry:");
-                contry = escanear.nextLine();
-                System.out.println("town:");
-                town = escanear.nextLine();
-                System.out.println("year");
-                year = escanear.nextInt();
-                System.out.println("mount");
-                mount = escanear.nextInt();
-                System.out.println("day");
-                day = escanear.nextInt();
+            System.out.println("Name of the stations");
+            sta = escanear.nextLine();
+            System.out.println("Contry:");
+            contry = escanear.nextLine();
+            System.out.println("town:");
+            town = escanear.nextLine();
+            System.out.println("Date:");
+            date = escanear.nextLine();
 
+            System.out.println("Value delta t");
+            at = escanear.nextFloat();
+            System.out.println("damping rate");
+            epsilon = escanear.nextFloat();
+            epsilon=epsilon/100;
 
-                //Lectura del archivo a analizar
-                System.out.println("name file to analyzed: ");
-                name_file = escanear.nextLine();
+            //Lectura del archivo a analizar
+            System.out.println("name file to analyzed");
+            name_file = escanear.nextLine();
 
-
+            //Spectrum existing = repository.findOneBySpectrum(name_file);
+            //if (existing == null) {
                 Spectrum sp = new Spectrum();
                 sp.setName(sta);
                 sp.setChannel("HHZ");
-                sp.setFileSprectrum("sismos " + contry);
-                sp.setCountry(contry);
-                sp.setTown(town);
-                sp.setYear(year);
-                sp.setMount(mount);
-                sp.setDay(day);
+                sp.setFile_sprectrum(name_file);
+                sp.setFecha(date);
+
                 repository.save(sp);
-                log.info("Datos guardados en la BD...");
-            }
-
-
-
-
+            //}
 
 
 
